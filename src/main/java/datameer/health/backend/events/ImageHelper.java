@@ -16,13 +16,15 @@ public class ImageHelper {
 		Random r = new Random();
 		int Low = 0;
 		File[] listFiles = file.listFiles(filenameFilter);
-		int High = listFiles.length - 1;
-		int Result = 0;
-		if (High > 0) {
-			Result = r.nextInt(High - Low) + Low;
+		if (listFiles != null) {
+			int High = listFiles.length - 1;
+			int Result = 0;
+			if (High > 0) {
+				Result = r.nextInt(High - Low) + Low;
+			}
+			return "img/" + listFiles[Result].getName();
+		} else {
+			return "http://www.omsakthiamma.org/images/404.png";
 		}
-		// System.out.println(listFiles[Result].getPath());
-
-		return "img/" + listFiles[Result].getName();
 	}
 }
