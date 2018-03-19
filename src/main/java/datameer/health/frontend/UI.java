@@ -6,7 +6,6 @@ import com.google.common.eventbus.DelayedBus;
 import com.google.common.eventbus.EventBus;
 
 import datameer.health.backend.events.DelayedEvent;
-import datameer.health.backend.events.ImageHelper;
 import datameer.health.backend.listener.EventListener;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -43,13 +42,12 @@ public class UI extends Application {
 		root.getChildren().add(btn);
 		primaryStage.setScene(new Scene(root, 300, 250));
 		primaryStage.setAlwaysOnTop(true);
-		// primaryStage.show();
 
 		EventBus eventBus = DelayedBus.getInstance();
 		EventListener listener = new EventListener();
 		eventBus.register(listener);
 
-		TimeUnit unit = TimeUnit.MINUTES;
+		TimeUnit unit = TimeUnit.SECONDS;// MINUTES;
 
 		DelayedEvent workingposition = DelayedEvent.chain(true,
 				new DelayedEvent.Builder().message("stand up").delay(40, unit).image(ImageHelper.getImage("standup"))
@@ -58,27 +56,22 @@ public class UI extends Application {
 						.repeat().build());
 
 		DelayedEvent breaks = DelayedEvent.chain(true,
-				new DelayedEvent.Builder().message("take a break").delay(25, unit)
-						.image(ImageHelper.getImage("exercise")).repeat().build(),
-				new DelayedEvent.Builder().message("back to work").delay(5, unit).image(ImageHelper.getImage("brain"))
-						.repeat().build(),
-				new DelayedEvent.Builder().message("take a break").delay(25, unit)
-						.image(ImageHelper.getImage("exercise")).repeat().build(),
-				new DelayedEvent.Builder().message("back to work").delay(5, unit).image(ImageHelper.getImage("brain"))
-						.repeat().build(),
-				new DelayedEvent.Builder().message("take a break").delay(25, unit)
-						.image(ImageHelper.getImage("exercise")).repeat().build(),
-				new DelayedEvent.Builder().message("back to work").delay(5, unit).image(ImageHelper.getImage("brain"))
-						.repeat().build(),
-				new DelayedEvent.Builder().message("take a break").delay(25, unit)
-						.image(ImageHelper.getImage("exercise")).repeat().build(),
-				new DelayedEvent.Builder().message("back to work").delay(15, unit).image(ImageHelper.getImage("brain"))
-						.repeat().build());
+				new DelayedEvent.Builder().message("take a break").delay(25, unit).duration(5, TimeUnit.MINUTES)
+						.image(ImageHelper.getImage("exercise")).repeat().playSound().build(),
+				new DelayedEvent.Builder().message("take a break").delay(25, unit).duration(5, TimeUnit.MINUTES)
+						.image(ImageHelper.getImage("exercise")).repeat().playSound().build(),
+				new DelayedEvent.Builder().message("take a break").delay(25, unit).duration(5, TimeUnit.MINUTES)
+						.image(ImageHelper.getImage("exercise")).repeat().playSound().build(),
+				new DelayedEvent.Builder().message("take a break").delay(25, unit).duration(15, TimeUnit.MINUTES)
+						.image(ImageHelper.getImage("exercise")).repeat().playSound().build()
+		);
 
 		DelayedEvent eyes = DelayedEvent.chain(true,
 				new DelayedEvent.Builder().message("close your eyes for 20 sec and take a deep breath").delay(20, unit)
+						.duration(20, TimeUnit.SECONDS).playSound()
 						.image(ImageHelper.getImage("breath")).repeat().build(),
 				new DelayedEvent.Builder().message("look into distance for 20 sec").delay(20, unit)
+						.duration(20, TimeUnit.SECONDS).playSound()
 						.image(ImageHelper.getImage("eyes")).repeat().build());
 
 		eventBus.post(new DelayedEvent.Builder().message("drink 200ml").delay(60, unit)
@@ -86,8 +79,6 @@ public class UI extends Application {
 		eventBus.post(workingposition);
 		eventBus.post(eyes);
 		eventBus.post(breaks);
-
-		// eventBus.unregister(listener);
 	}
 
 	public static Stage getPrimary() {

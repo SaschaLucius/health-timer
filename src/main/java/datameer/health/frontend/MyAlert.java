@@ -1,26 +1,31 @@
 package datameer.health.frontend;
 
-import java.util.Optional;
-
+import datameer.health.backend.CountDown;
 import datameer.health.backend.events.DelayedEvent;
-import javafx.scene.Group;
-import javafx.scene.Scene;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Stage;
 
 public class MyAlert extends Alert {
+	public static final String CLOSE = "Start";
+	// public static final String SNOOZE = "Snooze";
+
+	public static ButtonType buttonTypeClose = new ButtonType(CLOSE, ButtonData.CANCEL_CLOSE);
+	// public static ButtonType buttonTypeSnooze = new ButtonType(SNOOZE,
+	// ButtonData.NEXT_FORWARD);
 
 	public MyAlert(DelayedEvent event) {
 		super(AlertType.INFORMATION);
+
+		final CountDown countdown = new CountDown((int) event.duration() / 1000);
+		// final CountDownLabel countdownLabel = new CountDownLabel(countdown);
+
 		setTitle("Notification for you!");
 		setHeaderText(event.message());
-
-		getDialogPane().getScene().setRoot(new Group());
 
 		Image image = new Image(event.image());
 		ImageView imageView = new ImageView(image);
@@ -28,21 +33,26 @@ public class MyAlert extends Alert {
 		imageView.setPreserveRatio(true);
 		setGraphic(imageView);
 
-		ButtonType buttonTypeOk = new ButtonType("Close", ButtonData.CANCEL_CLOSE);
-		ButtonType buttonTypeSnooze = new ButtonType("Snooze", ButtonData.NEXT_FORWARD);
-		getButtonTypes().setAll(buttonTypeOk, buttonTypeSnooze);
-	}
+		getButtonTypes().setAll(buttonTypeClose);// , buttonTypeSnooze);
 
-	public Optional<ButtonType> showInFrontAndWait() {
-		Optional<ButtonType> showAndWait = super.showAndWait();
-		DialogPane dialogPane = getDialogPane();
-		System.out.println(dialogPane);
-		Scene scene = dialogPane.getScene();
-		System.out.println(scene);
-		Stage stage = (Stage) scene.getWindow();
-		System.out.println(stage);
-		stage.setAlwaysOnTop(true);
-		stage.toFront();
-		return showAndWait;
+		// FlowPane fp = new FlowPane();
+		// fp.getChildren().addAll(countdownLabel);
+
+		// getDialogPane().contentProperty().set(fp);
+
+		final Button btOk = (Button) getDialogPane().lookupButton(buttonTypeClose);
+
+		btOk.textProperty().bind(countdown.asString());
+
+		btOk.addEventFilter(ActionEvent.ACTION, e -> {
+			if (!countdown.isRunning())
+				countdown.start();
+
+			if (!countdown.timeLeftProperty().isEqualTo(0).get()) {
+				System.out.println("consume");
+				e.consume();
+			}
+		});
+
 	}
 }

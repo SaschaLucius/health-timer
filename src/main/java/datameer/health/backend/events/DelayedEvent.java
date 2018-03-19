@@ -10,6 +10,8 @@ public class DelayedEvent {
 	private DelayedEvent nextEvent;
 	private final String message;
 	private final String imagePath;
+	private boolean soundAtEnd;
+	private long duration;
 
 	private DelayedEvent(Builder eventBuilder) {
 		this.delay = eventBuilder.delay;
@@ -20,6 +22,9 @@ public class DelayedEvent {
 		if (eventBuilder.repeat) {
 			this.nextEvent = this;
 		}
+		this.soundAtEnd = eventBuilder.soundAtEnd;
+		this.duration = eventBuilder.duration;
+
 	}
 
 	public static DelayedEvent chain(boolean repeat, DelayedEvent... events) {
@@ -43,6 +48,17 @@ public class DelayedEvent {
 		return imagePath;
 	}
 
+	/**
+	 * @return duration in Milliseconds
+	 */
+	public long duration() {
+		return TimeUnit.MILLISECONDS.convert(duration, timeUnit);
+	}
+
+	public boolean playSound() {
+		return soundAtEnd;
+	}
+
 	public Optional<DelayedEvent> next() {
 		return Optional.fromNullable(nextEvent);
 	}
@@ -58,12 +74,25 @@ public class DelayedEvent {
 		private String message = "";
 		private boolean repeat = false;
 		private String imagePath = "";
+		private boolean soundAtEnd = false;
+		private long duration = 0;
 
 		/**
 		 * @param delayInMilliseconds
 		 */
 		public Builder delay(int delayInMilliseconds) {
 			this.delay = delayInMilliseconds;
+			return this;
+		}
+
+		public Builder playSound() {
+			this.soundAtEnd = true;
+			return this;
+		}
+
+		public Builder duration(int duration, TimeUnit timeUnit) {
+			this.duration = duration;
+			this.timeUnit = timeUnit;
 			return this;
 		}
 
