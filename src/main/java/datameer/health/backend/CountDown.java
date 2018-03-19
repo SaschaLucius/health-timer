@@ -47,6 +47,7 @@ public class CountDown {
 					timeLeftSting.set(String.format("%3d", timeLeftProperty().get()));
 				}
 				if (timeLeft.get() == 0) {
+					Sound.playSound();
 					timeLeftSting.set("Close");
 				}
 			}
