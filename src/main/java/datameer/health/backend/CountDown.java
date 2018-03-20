@@ -49,7 +49,7 @@ public class CountDown {
 				}
 				if (timeLeft.get() == 0) {
 					timeLeftSting.set("Close");
-					if (!played) {
+					if (!played) {// TODO dont play if window is already closed
 						played = true;
 						Sound.playSound();
 					}

@@ -18,7 +18,7 @@ public class MyAlert extends Alert {
 	public MyAlert(DelayedEvent event) {
 		super(AlertType.INFORMATION);
 
-		final CountDown countdown = new CountDown((int) event.duration() / 1000); // TODO
+		final CountDown countdown = new CountDown((int) event.duration());
 
 		setTitle("Notification for you!");
 		setHeaderText(event.message());

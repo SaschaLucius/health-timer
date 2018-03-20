@@ -35,7 +35,7 @@ public class DelayedDispatcher extends Dispatcher {
 					}
 				}
 			};
-			service.scheduleAtFixedRate(dispatcher, delayedEvent.delay(), 1, TimeUnit.MILLISECONDS);
+			service.scheduleAtFixedRate(dispatcher, delayedEvent.delay(), 1, TimeUnit.SECONDS);
 		} else {
 			defaultDispatcher.dispatch(event, subscribers);
 		}

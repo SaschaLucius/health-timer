@@ -6,7 +6,6 @@ import com.google.common.base.Optional;
 
 public class DelayedEvent {
 	private final long delay;
-	private final TimeUnit timeUnit;
 	private DelayedEvent nextEvent;
 	private final String message;
 	private final String imagePath;
@@ -15,7 +14,6 @@ public class DelayedEvent {
 
 	private DelayedEvent(Builder eventBuilder) {
 		this.delay = eventBuilder.delay;
-		this.timeUnit = eventBuilder.timeUnit;
 		this.nextEvent = eventBuilder.nextEvent;
 		this.message = eventBuilder.message;
 		this.imagePath = eventBuilder.imagePath;
@@ -38,10 +36,10 @@ public class DelayedEvent {
 	}
 
 	/**
-	 * @return delay in Milliseconds
+	 * @return delay in Seconds
 	 */
 	public long delay() {
-		return TimeUnit.MILLISECONDS.convert(delay, timeUnit);
+		return delay;
 	}
 
 	public String image() {
@@ -49,10 +47,10 @@ public class DelayedEvent {
 	}
 
 	/**
-	 * @return duration in Milliseconds
+	 * @return duration in Seconds
 	 */
 	public long duration() {
-		return TimeUnit.MILLISECONDS.convert(duration, timeUnit);
+		return duration;
 	}
 
 	public boolean playSound() {
@@ -69,7 +67,6 @@ public class DelayedEvent {
 
 	public static class Builder {
 		private long delay = 0;
-		private TimeUnit timeUnit = TimeUnit.MILLISECONDS;
 		private DelayedEvent nextEvent = null;
 		private String message = "";
 		private boolean repeat = false;
@@ -91,14 +88,12 @@ public class DelayedEvent {
 		}
 
 		public Builder duration(int duration, TimeUnit timeUnit) {
-			this.duration = duration;
-			this.timeUnit = timeUnit;
+			this.duration = TimeUnit.SECONDS.convert(duration, timeUnit);
 			return this;
 		}
 
 		public Builder delay(int delay, TimeUnit timeUnit) {
-			this.delay = delay;
-			this.timeUnit = timeUnit;
+			this.delay = TimeUnit.SECONDS.convert(delay, timeUnit);
 			return this;
 		}
 
