@@ -1,7 +1,8 @@
-.project
 .classpath
 .DS_Store
-*.class
+.project
 .gradle/**/*
-build/**/*
+.settings/**/*
 bin/**/*
+build/**/*
+*.class
