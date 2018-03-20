@@ -37,6 +37,7 @@ public class EventListener {
 					ButtonType buttonType = showAndWait.get();
 					switch (buttonType.getText()) {
 					case MyAlert.CLOSE:
+						myAlert.stop();
 						System.out.println(customEvent.message() + ": Close");
 						setEventsHandled(getEventsHandled() + 1);
 						if (customEvent.next().isPresent()) {
@@ -44,23 +45,13 @@ public class EventListener {
 						}
 						break;
 					default:
+						myAlert.stop();
 						System.out.println(buttonType.toString());
 						throw new IllegalStateException();
 					}
 				}
 			}
 		});
-
-		// try {
-		// blub.await();
-		// } catch (InterruptedException e) {
-		// e.printStackTrace();
-		// }
-		// setEventsHandled(getEventsHandled() + 1);
-		// if (customEvent.next().isPresent()) {
-		// DelayedBus.getInstance().post(customEvent.next().get());
-		// }
-
 	}
 
 	@Subscribe

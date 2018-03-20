@@ -49,7 +49,7 @@ public class CountDown {
 				}
 				if (timeLeft.get() == 0) {
 					timeLeftSting.set("Close");
-					if (!played) {// TODO dont play if window is already closed
+					if (!played) {
 						played = true;
 						Sound.playSound();
 					}
@@ -61,6 +61,10 @@ public class CountDown {
 	public boolean isRunning() {
 		return timeline.getStatus() != javafx.animation.Animation.Status.PAUSED
 				&& timeline.getStatus() != javafx.animation.Animation.Status.STOPPED;
+	}
+
+	public void stop() {
+		timeline.stop();
 	}
 
 	public void start() {

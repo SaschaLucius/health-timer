@@ -12,13 +12,14 @@ import javafx.scene.image.ImageView;
 
 public class MyAlert extends Alert {
 	public static final String CLOSE = "Start";
+	final CountDown countdown;
 
 	public static ButtonType buttonTypeClose = new ButtonType(CLOSE, ButtonData.CANCEL_CLOSE);
 
 	public MyAlert(DelayedEvent event) {
 		super(AlertType.INFORMATION);
 
-		final CountDown countdown = new CountDown((int) event.duration());
+		countdown = new CountDown((int) event.duration());
 
 		setTitle("Notification for you!");
 		setHeaderText(event.message());
@@ -43,6 +44,9 @@ public class MyAlert extends Alert {
 				e.consume();
 			}
 		});
+	}
 
+	public void stop() {
+		countdown.stop();
 	}
 }
