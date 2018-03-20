@@ -40,6 +40,7 @@ public class CountDown {
 				new KeyFrame(Duration.seconds(time), new KeyValue(timeLeftDouble, 0)));
 
 		timeLeftDouble.addListener(new InvalidationListener() {
+			private boolean played = false;
 			@Override
 			public void invalidated(Observable o) {
 				timeLeft.set((int) Math.ceil(timeLeftDouble.get()));
@@ -47,8 +48,11 @@ public class CountDown {
 					timeLeftSting.set(String.format("%3d", timeLeftProperty().get()));
 				}
 				if (timeLeft.get() == 0) {
-					Sound.playSound();
 					timeLeftSting.set("Close");
+					if (!played) {
+						played = true;
+						Sound.playSound();
+					}
 				}
 			}
 		});

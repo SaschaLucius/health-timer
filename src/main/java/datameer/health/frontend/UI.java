@@ -47,7 +47,7 @@ public class UI extends Application {
 		EventListener listener = new EventListener();
 		eventBus.register(listener);
 
-		TimeUnit unit = TimeUnit.SECONDS;// MINUTES;
+		TimeUnit unit = TimeUnit.MINUTES;
 
 		DelayedEvent workingposition = DelayedEvent.chain(true,
 				new DelayedEvent.Builder().message("stand up").delay(40, unit).image(ImageHelper.getImage("standup"))
