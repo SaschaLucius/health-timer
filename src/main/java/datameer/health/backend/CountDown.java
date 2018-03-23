@@ -6,20 +6,18 @@ import javafx.animation.Timeline;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.util.Duration;
 
 public class CountDown {
-	private final ReadOnlyIntegerWrapper timeLeft;
+	private int timeLeft;
 	private final ReadOnlyDoubleWrapper timeLeftDouble;
 	private final ReadOnlyStringWrapper timeLeftSting;
 	private final Timeline timeline;
 
-	public ReadOnlyIntegerProperty timeLeftProperty() {
-		return timeLeft.getReadOnlyProperty();
+	public int timeLeft() {
+		return timeLeft;
 	}
 
 	public ReadOnlyStringProperty asString() {
@@ -27,7 +25,7 @@ public class CountDown {
 	}
 
 	public CountDown(final int time) {
-		timeLeft = new ReadOnlyIntegerWrapper(time);
+		timeLeft = time;
 		timeLeftDouble = new ReadOnlyDoubleWrapper(time);
 		timeLeftSting = new ReadOnlyStringWrapper();
 		if (time == 0) {
@@ -40,17 +38,17 @@ public class CountDown {
 				new KeyFrame(Duration.seconds(time), new KeyValue(timeLeftDouble, 0)));
 
 		timeLeftDouble.addListener(new InvalidationListener() {
-			private boolean played = false;
+			private boolean alreadyPlayed = false;
 			@Override
 			public void invalidated(Observable o) {
-				timeLeft.set((int) Math.ceil(timeLeftDouble.get()));
+				timeLeft = (int) Math.ceil(timeLeftDouble.get());
 				if (isRunning()) {
-					timeLeftSting.set(String.format("%3d", timeLeftProperty().get()));
+					timeLeftSting.set(String.format("%3d", timeLeft));
 				}
-				if (timeLeft.get() == 0) {
+				if (timeLeft == 0) {
 					timeLeftSting.set("Close");
-					if (!played) {
-						played = true;
+					if (!alreadyPlayed) {
+						alreadyPlayed = true;
 						Sound.playSound();
 					}
 				}

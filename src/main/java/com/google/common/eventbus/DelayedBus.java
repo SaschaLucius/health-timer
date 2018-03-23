@@ -1,5 +1,6 @@
 package com.google.common.eventbus;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.MoreExecutors;
 
 public class DelayedBus extends EventBus {
@@ -18,6 +19,7 @@ public class DelayedBus extends EventBus {
 		return instance;
 	}
 
+	@VisibleForTesting
 	public void clear() {
 		dispatcher.clear();
 	}

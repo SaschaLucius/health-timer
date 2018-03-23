@@ -14,11 +14,11 @@ public class ImageHelper {
 			}
 		};
 		URL resource = ImageHelper.class.getClassLoader().getResource("img/brain.jpg");
-		File file = new File(resource.getFile());
-		file = file.getParentFile();
+		File brainFile = new File(resource.getFile());
+		File parentFolder = brainFile.getParentFile();
 		Random r = new Random();
 		int Low = 0;
-		File[] listFiles = file.listFiles(filenameFilter);
+		File[] listFiles = parentFolder.listFiles(filenameFilter);
 		if (listFiles != null) {
 			int High = listFiles.length - 1;
 			int Result = 0;

@@ -38,7 +38,7 @@ public class DelayedEvent {
 	/**
 	 * @return delay in Seconds
 	 */
-	public long delay() {
+	public long delayInSeconds() {
 		return delay;
 	}
 

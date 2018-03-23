@@ -40,7 +40,7 @@ public class MyAlert extends Alert {
 			if (!countdown.isRunning()) {
 				countdown.start();
 			}
-			if (!countdown.timeLeftProperty().isEqualTo(0).get()) {
+			if (countdown.timeLeft() != 0) {
 				e.consume();
 			}
 		});

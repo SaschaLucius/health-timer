@@ -10,16 +10,17 @@ import java.util.concurrent.TimeUnit;
 import datameer.health.backend.events.DelayedEvent;
 
 public class DelayedDispatcher extends Dispatcher {
-	Dispatcher defaultDispatcher = Dispatcher.perThreadDispatchQueue();
-	ScheduledExecutorService service;
+	Dispatcher internalDispatcher = Dispatcher.perThreadDispatchQueue();
+	ScheduledExecutorService schedulerService;
 
 	DelayedDispatcher() {
-		service = Executors.newScheduledThreadPool(0);
+		schedulerService = Executors.newScheduledThreadPool(0); // dont keep
+																// idle threads
 	}
 
 	public void clear() {
-		service.shutdownNow();
-		service = Executors.newScheduledThreadPool(0);
+		schedulerService.shutdownNow();
+		schedulerService = Executors.newScheduledThreadPool(0);
 	}
 
 	@Override
@@ -35,9 +36,9 @@ public class DelayedDispatcher extends Dispatcher {
 					}
 				}
 			};
-			service.scheduleAtFixedRate(dispatcher, delayedEvent.delay(), 1, TimeUnit.SECONDS);
+			schedulerService.scheduleAtFixedRate(dispatcher, delayedEvent.delayInSeconds(), 1, TimeUnit.SECONDS);
 		} else {
-			defaultDispatcher.dispatch(event, subscribers);
+			internalDispatcher.dispatch(event, subscribers);
 		}
 	}
 }
